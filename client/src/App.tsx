@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import './App.css'
 
 function App() {
   const [data, setData] = useState<any>()
   useEffect(() => {
     const getData = async () => {
-      await fetch('http://localhost:4000/hello')
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data)
-          setData(data)
-        })
-        .catch((error) => console.log(error))
+      axios({
+        method: 'post',
+        url: 'http://localhost:4000/api/add_user',
+        data: {
+          firstName: 'Pasha',
+          lastName: 'Khoshkebari',
+        },
+      })
     }
     getData()
   }, [])

@@ -6,15 +6,17 @@ const hello = async (req, res, next) => {
     res.status(200).send({ name: 'HELLO' })
   } catch (error) {
     console.log(error)
+    res.status(400).send('PROBLEM')
   }
 }
 
 const addUser = async (req, res, next) => {
   try {
+    const { firstName, lastName } = req.body
+
     const docRef = await addDoc(collection(db, 'Users'), {
-      first: 'Ada',
-      last: 'Lovelace',
-      born: 1815,
+      first: firstName,
+      last: lastName,
     })
 
     res.status(200).send({
@@ -22,6 +24,7 @@ const addUser = async (req, res, next) => {
     })
   } catch (error) {
     console.log(error)
+    res.status(400).send('PROBLEM')
   }
 }
 
