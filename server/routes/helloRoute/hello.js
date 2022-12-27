@@ -16,7 +16,10 @@ const addUser = async (req, res, next) => {
       last: 'Lovelace',
       born: 1815,
     })
-    console.log('Document written with ID: ', docRef.id)
+
+    res.status(200).send({
+      docRef: docRef.id,
+    })
   } catch (error) {
     console.log(error)
   }

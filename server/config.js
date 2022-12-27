@@ -1,4 +1,4 @@
-const dotEnv = require('dotenv')
+const dotEnv = require('dotenv').config()
 
 const {
   PORT,
@@ -11,15 +11,17 @@ const {
   STORAGEBUCKET,
 } = process.env
 
+const firebaseConfig = {
+  apiKey: APIKEY,
+  authDomain: AUTHDOMAIN,
+  projectId: PROJECTID,
+  storageBucket: STORAGEBUCKET,
+  messagingSenderId: MESSAGINGSENDERID,
+  appId: APPID,
+  measurementId: MEASUREMENTID,
+}
+
 module.exports = {
   port: PORT,
-  firebaseConfig: {
-    apiKey: APIKEY,
-    authDomain: AUTHDOMAIN,
-    projectId: PROJECTID,
-    storageBucket: STORAGEBUCKET,
-    messagingSenderId: MESSAGINGSENDERID,
-    appId: APPID,
-    measurementId: MEASUREMENTID,
-  },
+  firebaseConfig,
 }
