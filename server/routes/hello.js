@@ -1,4 +1,4 @@
-const { db } = require('../../firebase/firebase-config')
+const { db } = require('../firebase/firebase-config')
 const { collection, addDoc, getDocs } = require('firebase/firestore')
 
 const hello = async (req, res, next) => {
