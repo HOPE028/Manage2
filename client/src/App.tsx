@@ -18,16 +18,10 @@ function App() {
   }
 
   const getUsers = async () => {
-    // axios({
-    //   method: 'get',
-    //   url: 'http://localhost:4000/api/users',
-    // }).then((res) => console.log(res))
-
     axios
       .get('http://localhost:4000/api/get_users')
       .then((res) => res.data.data)
       .then((res) => console.log(res))
-    // .then((res) => console.log(res))
   }
 
   return (
