@@ -28,9 +28,14 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user
 })
 
+const currentUserGet = () => {
+  return currentUser
+}
+
 module.exports = {
   loginUser,
   createUser,
   logOut,
+  currentUserGet,
   currentUser,
 }
