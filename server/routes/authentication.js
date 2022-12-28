@@ -6,7 +6,7 @@ const signUpUserAuth = async (req, res, next) => {
   try {
     const { email, password } = req.body
     const response = await createUser(email, password)
-    res.status(200).send({ resp: response })
+    res.status(200).send({ data: response })
   } catch (error) {
     console.log(error)
     res.status(400).send('PROBLEM')
