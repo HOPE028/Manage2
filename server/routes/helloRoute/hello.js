@@ -1,5 +1,5 @@
 const { db } = require('../../firebase-config')
-const { collection, addDoc } = require('firebase/firestore')
+const { collection, addDoc, getDocs } = require('firebase/firestore')
 
 const hello = async (req, res, next) => {
   try {
@@ -28,7 +28,23 @@ const addUser = async (req, res, next) => {
   }
 }
 
+const getUsers = async (req, res, next) => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'Users'))
+
+    let Users = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+    res.status(200).send({
+      data: Users,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(400).send('PROBLEM')
+  }
+}
+
 module.exports = {
   hello,
   addUser,
+  getUsers,
 }

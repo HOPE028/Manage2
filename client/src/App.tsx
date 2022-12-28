@@ -1,26 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import './App.css'
 
 function App() {
   const [data, setData] = useState<any>()
-  useEffect(() => {
-    const getData = async () => {
-      axios({
-        method: 'post',
-        url: 'http://localhost:4000/api/add_user',
-        data: {
-          firstName: 'Pasha',
-          lastName: 'Khoshkebari',
-        },
-      })
-    }
-    getData()
-  }, [])
+
+  const addUser = async () => {
+    axios({
+      method: 'post',
+      url: 'http://localhost:4000/api/add_user',
+      data: {
+        firstName: 'Pasha',
+        lastName: 'Khoshkebari',
+      },
+    })
+      .then((res) => res.data)
+      .then((res) => console.log(res))
+  }
+
+  const getUsers = async () => {
+    // axios({
+    //   method: 'get',
+    //   url: 'http://localhost:4000/api/users',
+    // }).then((res) => console.log(res))
+
+    axios
+      .get('http://localhost:4000/api/get_users')
+      .then((res) => res.data.data)
+      .then((res) => console.log(res))
+    // .then((res) => console.log(res))
+  }
 
   return (
     <div>
-      <button onClick={() => console.log(data)}>PRINT</button>
+      <button onClick={addUser}>Add User</button>
+      <button onClick={getUsers}>Get Users</button>
     </div>
   )
 }
