@@ -1,6 +1,5 @@
 const { db } = require('../firebase/firebase-config')
 const { createUser, currentUserGet } = require('../firebase/Auth')
-const { collection, addDoc, getDocs } = require('firebase/firestore')
 
 const signUpUserAuth = async (req, res, next) => {
   try {

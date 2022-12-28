@@ -1,19 +1,19 @@
 import React, { useState, useEffect, MouseEventHandler } from 'react'
 import axios from 'axios'
 
-export default function CreateUserManager() {
-  const [userID, setUserID] = useState<String>()
+export interface step {
+  step: number
+  setStep: Function
+}
+
+export default function CreateUserManager(props: step) {
   const [email, setEmail] = useState<String>('')
   const [password, setPassword] = useState<String>('')
   const [confirmPassword, setConfirmPassword] = useState<String>('')
   const [error, setError] = useState<String>('')
   const [loading, setLoading] = useState<Boolean>(false)
 
-  useEffect(() => {
-    addUserToFirebase()
-  }, [])
-
-  const addUserToFirebase = async () => {
+  const addUserToAuth = async () => {
     let temp = ''
 
     await axios
@@ -26,8 +26,21 @@ export default function CreateUserManager() {
       .then((res) => (temp = res.uid))
       .catch((error) => console.log(error))
 
-    setUserID(temp)
     return temp
+  }
+
+  const addUserToFirebase = async (uid: String) => {
+    await axios
+      .post('http://localhost:4000/api/initially_add_user', {
+        email: email,
+        position: 'Manager',
+        uid: uid,
+        data: {
+          teamSettingsCompleted: false,
+          registeredSelfInTeam: false,
+        },
+      })
+      .catch((error) => console.log(error))
   }
 
   const onSubmit = async () => {
@@ -36,7 +49,13 @@ export default function CreateUserManager() {
       return setLoading(false)
     }
 
-    const userUID = addUserToFirebase()
+    try {
+      const userUID = await addUserToAuth()
+      await addUserToFirebase(userUID)
+      props.setStep(props.step + 1)
+    } catch (error) {
+      console.log(console.log(error))
+    }
   }
 
   return (
