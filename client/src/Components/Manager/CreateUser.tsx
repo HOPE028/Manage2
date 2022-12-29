@@ -1,10 +1,6 @@
 import React, { useState, useEffect, MouseEventHandler } from 'react'
 import axios from 'axios'
-
-export interface step {
-  step: number
-  setStep: Function
-}
+import { step } from './SignUp'
 
 export default function CreateUserManager(props: step) {
   const [email, setEmail] = useState<String>('')
