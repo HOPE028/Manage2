@@ -18,11 +18,11 @@ export default function TeamSettingsManager(props: step) {
     Array<interfaceCustomUserInfoRequired>
   >([{ name: '', description: '', valueType: 'String' }])
   const [memberAccessToInfoOnGeneralPage, setMemberAccessToInfoOnGeneralPage] =
-    useState<Array<String>>()
+    useState<Array<String>>([])
   const [
     generalAccessToInfoOnGeneralPage,
     setGeneralAccessToInfoOnGeneralPage,
-  ] = useState<Array<String>>()
+  ] = useState<Array<String>>([])
 
   const order = [
     <TeamBasicInfo
