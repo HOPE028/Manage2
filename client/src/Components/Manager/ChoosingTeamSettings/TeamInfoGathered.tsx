@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState } from 'react'
 import { interfaceCustomUserInfoRequired } from '../TeamSettings'
 
 interface interfaceTeamInfoGathered {
@@ -11,23 +11,38 @@ interface interfaceTeamInfoGathered {
 export default function TeamInfoGathered(props: interfaceTeamInfoGathered) {
   const [error, setError] = useState<String>('')
 
+  const handleNextPage = () => {
+    if (error === 'All name fields must be filled') setError('')
+
+    if (!noEmptyField(props.customUserInfoRequired))
+      return setError('All name fields must be filled')
+
+    if (!onlyUniqueNames(props.customUserInfoRequired))
+      return setError('All name fields must be unique')
+
+    props.setStep(props.step + 1)
+  }
+
   return (
     <div>
       {error && error}
       <ViewCustomInfoRequired
         customUserInfoRequired={props.customUserInfoRequired}
         setCustomUserInfoRequired={props.setCustomUserInfoRequired}
+        error={error}
         setError={setError}
       />
       <AddFieldToCustomInformation
         customUserInfoRequired={props.customUserInfoRequired}
         setCustomUserInfoRequired={props.setCustomUserInfoRequired}
+        error={error}
         setError={setError}
       />
 
       <button onClick={() => console.log(props.customUserInfoRequired)}>
         DATA
       </button>
+      <button onClick={handleNextPage}>Next</button>
     </div>
   )
 }
@@ -35,6 +50,7 @@ export default function TeamInfoGathered(props: interfaceTeamInfoGathered) {
 interface interfaceCustomUserInfoRequiredFunctions {
   customUserInfoRequired: Array<interfaceCustomUserInfoRequired> | undefined
   setCustomUserInfoRequired: Function
+  error: String
   setError: Function
 }
 
@@ -73,6 +89,16 @@ const ViewCustomInfoRequired = (
                 onChange={(e) =>
                   handleInformationChange('name', index, e.target.value)
                 }
+                placeholder='Enter Name'
+              />
+
+              <input
+                type='text'
+                value={field.description}
+                onChange={(e) =>
+                  handleInformationChange('description', index, e.target.value)
+                }
+                placeholder='Enter Description'
               />
 
               <select
@@ -97,26 +123,13 @@ const ViewCustomInfoRequired = (
 const AddFieldToCustomInformation = (
   props: interfaceCustomUserInfoRequiredFunctions
 ) => {
-  const noEmptyField = useCallback((): boolean => {
-    let emptySpots = false
-
-    if (!props.customUserInfoRequired) return false
-
-    for (const field of props.customUserInfoRequired) {
-      if (field.name == '') emptySpots = true
-    }
-    return emptySpots
-  }, [emptySpots])
-
   const handleAddField = () => {
+    if (props.error === 'Please fill in all fields before creating new ones')
+      props.setError('')
+
     if (!props.customUserInfoRequired) return
 
-    const carryOn = useMemo(
-      () => noEmptyField(),
-      [props.customUserInfoRequired]
-    )
-
-    if (!carryOn)
+    if (!noEmptyField(props.customUserInfoRequired))
       return props.setError(
         'Please fill in all fields before creating new ones'
       )
@@ -124,6 +137,7 @@ const AddFieldToCustomInformation = (
     let tempInfoRequired = props.customUserInfoRequired
     let tempObject: interfaceCustomUserInfoRequired = {
       name: '',
+      description: '',
       valueType: 'String',
     }
 
@@ -136,4 +150,32 @@ const AddFieldToCustomInformation = (
       <button onClick={handleAddField}>Add New Field</button>
     </div>
   )
+}
+
+const noEmptyField = (
+  fields: Array<interfaceCustomUserInfoRequired> | undefined
+): boolean => {
+  if (!fields) return false
+
+  for (const field of fields) {
+    if (field.name == '') return false
+  }
+  return true
+}
+
+const onlyUniqueNames = (
+  fields: Array<interfaceCustomUserInfoRequired> | undefined
+): boolean => {
+  if (!fields) return false
+
+  let map: any = {}
+
+  for (const field of fields) {
+    if (map[field.name] == undefined) {
+      map[field.name] = 1
+    } else {
+      return false
+    }
+  }
+  return true
 }
