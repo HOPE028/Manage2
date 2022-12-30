@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import {
+  interfaceCustomUserInfoRequired,
+  interfaceSpecialUserInfoRequired,
+} from '../TeamSettings'
 
-export default function TeamCreation() {
+interface interfaceTeamCreation {
+  step: Number
+  setStep: Function
+  customUserInfoRequired: Array<interfaceCustomUserInfoRequired>
+  specialUserInfoRequired: Array<interfaceSpecialUserInfoRequired>
+}
+
+export default function TeamCreation(props: interfaceTeamCreation) {
+  const handleTeamCreation = () => {}
+
   const [loading, setLoading] = useState<boolean>(true)
 
   return (

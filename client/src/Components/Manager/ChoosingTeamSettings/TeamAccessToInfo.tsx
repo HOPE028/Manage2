@@ -1,5 +1,8 @@
 import React, { DetailedHTMLProps, InputHTMLAttributes } from 'react'
-import { interfaceCustomUserInfoRequired } from '../TeamSettings'
+import {
+  interfaceCustomUserInfoRequired,
+  interfaceSpecialUserInfoRequired,
+} from '../TeamSettings'
 import './style.css'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -7,6 +10,7 @@ interface interfaceTeamAccessToInfo {
   step: number
   setStep: Function
   customUserInfoRequired: Array<interfaceCustomUserInfoRequired>
+  specialUserInfoRequired: Array<interfaceSpecialUserInfoRequired>
 
   // Information View Arrays
   memberAccessToInfoOnGeneralPage: Array<String>
@@ -39,13 +43,15 @@ export default function TeamAccessToInfo(props: interfaceTeamAccessToInfo) {
     <div>
       <h3>Access Members have to info on general page</h3>
       <UserHaveAccessToField
-        userInfoRequired={props.customUserInfoRequired}
+        customUserInfoRequired={props.customUserInfoRequired}
+        specialUserInfoRequired={props.specialUserInfoRequired}
         accessToPage={props.memberAccessToInfoOnGeneralPage}
         setAccessToPage={props.setMemberAccessToInfoOnGeneralPage}
       />
       <h3>Access General have to info on general page</h3>
       <UserHaveAccessToField
-        userInfoRequired={props.customUserInfoRequired}
+        customUserInfoRequired={props.customUserInfoRequired}
+        specialUserInfoRequired={props.specialUserInfoRequired}
         accessToPage={props.generalAccessToInfoOnGeneralPage}
         setAccessToPage={props.setGeneralAccessToInfoOnGeneralPage}
       />
@@ -58,7 +64,8 @@ export default function TeamAccessToInfo(props: interfaceTeamAccessToInfo) {
         <div>
           <h3>Access Members have to info on Individual pages</h3>
           <UserHaveAccessToField
-            userInfoRequired={props.customUserInfoRequired}
+            customUserInfoRequired={props.customUserInfoRequired}
+            specialUserInfoRequired={props.specialUserInfoRequired}
             accessToPage={props.memberAccessToInfoOnIndividualPage}
             setAccessToPage={props.setMemberAccessToInfoOnIndividualPage}
           />
@@ -74,7 +81,8 @@ export default function TeamAccessToInfo(props: interfaceTeamAccessToInfo) {
         <div>
           <h3>Access General have to info on Individual pages</h3>
           <UserHaveAccessToField
-            userInfoRequired={props.customUserInfoRequired}
+            customUserInfoRequired={props.customUserInfoRequired}
+            specialUserInfoRequired={props.specialUserInfoRequired}
             accessToPage={props.generalAccessToInfoOnIndividualPage}
             setAccessToPage={props.setGeneralAccessToInfoOnIndividualPage}
           />
@@ -93,14 +101,7 @@ export default function TeamAccessToInfo(props: interfaceTeamAccessToInfo) {
       >
         Data
       </button>
-      <button
-        onClick={() =>
-          console.log(
-            props.memberViewIndividualPage,
-            props.generalViewIndividualPage
-          )
-        }
-      >
+      <button onClick={() => console.log(props.specialUserInfoRequired)}>
         Further Data
       </button>
       <button onClick={handleSubmit}>Create Team!</button>
@@ -109,7 +110,8 @@ export default function TeamAccessToInfo(props: interfaceTeamAccessToInfo) {
 }
 
 interface interfaceUserHaveAccessToField {
-  userInfoRequired: Array<interfaceCustomUserInfoRequired>
+  customUserInfoRequired: Array<interfaceCustomUserInfoRequired>
+  specialUserInfoRequired: Array<interfaceSpecialUserInfoRequired>
   accessToPage: Array<String>
   setAccessToPage: Function
 }
@@ -131,7 +133,22 @@ const UserHaveAccessToField = (props: interfaceUserHaveAccessToField) => {
 
   return (
     <div>
-      {props.userInfoRequired.map((field, index) => {
+      {props.customUserInfoRequired.map((field, index) => {
+        const key = uuidv4()
+        return (
+          <div key={index}>
+            <p>{field.name}</p>
+            <input
+              type='checkbox'
+              id={key}
+              className='toggle'
+              onChange={(e) => handleChange(field.name)}
+            />
+            <label htmlFor={key}></label>
+          </div>
+        )
+      })}
+      {props.specialUserInfoRequired.map((field, index) => {
         const key = uuidv4()
         return (
           <div key={index}>

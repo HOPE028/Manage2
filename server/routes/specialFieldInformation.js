@@ -1,10 +1,5 @@
 const specialFields = [
   {
-    name: 'Name',
-    description: 'Your Name',
-    valueType: 'String',
-  },
-  {
     name: 'Profile Picture',
     description: 'A profile picture for your account.',
     valueType: 'File',

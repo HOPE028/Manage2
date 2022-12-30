@@ -26,7 +26,14 @@ export default function TeamSettingsManager(props: step) {
   >([{ name: '', description: '', valueType: 'String' }])
   const [specialUserInfoRequired, setSpecialUserInfoRequired] = useState<
     Array<interfaceSpecialUserInfoRequired>
-  >([{ name: 'Name', description: 'What is your name?', valueType: 'String' }])
+  >([
+    { name: 'Name', description: 'What is your name?', valueType: 'String' },
+    {
+      name: 'Hours',
+      description: 'List of hours you have worked, volunteered, etc..',
+      valueType: 'Number',
+    },
+  ])
 
   const [memberAccessToInfoOnGeneralPage, setMemberAccessToInfoOnGeneralPage] =
     useState<Array<String>>([])
@@ -61,6 +68,8 @@ export default function TeamSettingsManager(props: step) {
       setStep={setTeamSettingsStep}
       customUserInfoRequired={customUserInfoRequired}
       setCustomUserInfoRequired={setCustomUserInfoRequired}
+      specialUserInfoRequired={specialUserInfoRequired}
+      setSpecialUserInfoRequired={setSpecialUserInfoRequired}
     />,
     <TeamAccessToInfo
       step={teamSettingsStep}
@@ -70,6 +79,7 @@ export default function TeamSettingsManager(props: step) {
       generalViewIndividualPage={generalViewIndividualPage}
       setGeneralViewIndividualPage={setGeneralViewIndividualPage}
       customUserInfoRequired={customUserInfoRequired}
+      specialUserInfoRequired={specialUserInfoRequired}
       memberAccessToInfoOnGeneralPage={memberAccessToInfoOnGeneralPage}
       setMemberAccessToInfoOnGeneralPage={setMemberAccessToInfoOnGeneralPage}
       generalAccessToInfoOnGeneralPage={generalAccessToInfoOnGeneralPage}
@@ -83,7 +93,12 @@ export default function TeamSettingsManager(props: step) {
         setGeneralAccessToInfoOnIndividualPage
       }
     />,
-    <TeamCreation />,
+    <TeamCreation
+      step={props.step}
+      setStep={props.setStep}
+      customUserInfoRequired={customUserInfoRequired}
+      specialUserInfoRequired={specialUserInfoRequired}
+    />,
   ]
 
   return <div>{order[teamSettingsStep]}</div>
