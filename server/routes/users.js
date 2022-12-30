@@ -9,7 +9,7 @@ const {
 } = require('firebase/firestore')
 
 const initialAddUser = async (req, res, next) => {
-  const { email, uid, position, data } = req.body
+  const { email, uid, position, team, data } = req.body
 
   if (!email || !uid || !position) {
     res.status(400).send('Insufficient data')
@@ -20,6 +20,7 @@ const initialAddUser = async (req, res, next) => {
       email: email,
       position: position,
       data,
+      team: team,
     })
 
     res.status(200).send({

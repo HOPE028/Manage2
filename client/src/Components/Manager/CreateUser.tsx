@@ -31,6 +31,7 @@ export default function CreateUserManager(props: step) {
         email: email,
         position: 'Manager',
         uid: uid,
+        team: '',
         data: {
           teamSettingsCompleted: false,
           registeredSelfInTeam: false,
