@@ -26,6 +26,15 @@ interface interfaceTeamAccessToInfo {
   setGeneralViewIndividualPage: Function
 }
 export default function TeamAccessToInfo(props: interfaceTeamAccessToInfo) {
+  const handleSubmit = () => {
+    if (
+      window.confirm(
+        'Are you sure you would like to create team? Some settings are permenant!'
+      )
+    )
+      props.setStep(props.step + 1)
+  }
+
   return (
     <div>
       <h3>Access Members have to info on general page</h3>
@@ -94,6 +103,7 @@ export default function TeamAccessToInfo(props: interfaceTeamAccessToInfo) {
       >
         Further Data
       </button>
+      <button onClick={handleSubmit}>Create Team!</button>
     </div>
   )
 }

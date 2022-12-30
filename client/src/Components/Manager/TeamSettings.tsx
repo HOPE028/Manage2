@@ -3,6 +3,7 @@ import { step } from './SignUp'
 import TeamBasicInfo from './ChoosingTeamSettings/TeamBasicInfo'
 import TeamInfoGathered from './ChoosingTeamSettings/TeamInfoGathered'
 import TeamAccessToInfo from './ChoosingTeamSettings/TeamAccessToInfo'
+import TeamCreation from './ChoosingTeamSettings/TeamCreation'
 
 export interface interfaceCustomUserInfoRequired {
   name: string
@@ -72,6 +73,7 @@ export default function TeamSettingsManager(props: step) {
         setGeneralAccessToInfoOnIndividualPage
       }
     />,
+    <TeamCreation />,
   ]
 
   return <div>{order[teamSettingsStep]}</div>
