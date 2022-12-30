@@ -23,6 +23,18 @@ export default function TeamSettingsManager(props: step) {
     generalAccessToInfoOnGeneralPage,
     setGeneralAccessToInfoOnGeneralPage,
   ] = useState<Array<String>>([])
+  const [
+    memberAccessToInfoOnIndividualPage,
+    setMemberAccessToInfoOnIndividualPage,
+  ] = useState<Array<String>>([])
+  const [
+    generalAccessToInfoOnIndividualPage,
+    setGeneralAccessToInfoOnIndividualPage,
+  ] = useState<Array<String>>([])
+  const [generalViewIndividualPage, setGeneralViewIndividualPage] =
+    useState<boolean>(false)
+  const [memberViewIndividualPage, setMemberViewIndividualPage] =
+    useState<boolean>(false)
 
   const order = [
     <TeamBasicInfo
@@ -42,11 +54,23 @@ export default function TeamSettingsManager(props: step) {
     <TeamAccessToInfo
       step={teamSettingsStep}
       setStep={setTeamSettingsStep}
+      memberViewIndividualPage={memberViewIndividualPage}
+      setMemberViewIndividualPage={setMemberViewIndividualPage}
+      generalViewIndividualPage={generalViewIndividualPage}
+      setGeneralViewIndividualPage={setGeneralViewIndividualPage}
       customUserInfoRequired={customUserInfoRequired}
       memberAccessToInfoOnGeneralPage={memberAccessToInfoOnGeneralPage}
       setMemberAccessToInfoOnGeneralPage={setMemberAccessToInfoOnGeneralPage}
       generalAccessToInfoOnGeneralPage={generalAccessToInfoOnGeneralPage}
       setGeneralAccessToInfoOnGeneralPage={setGeneralAccessToInfoOnGeneralPage}
+      memberAccessToInfoOnIndividualPage={memberAccessToInfoOnIndividualPage}
+      setMemberAccessToInfoOnIndividualPage={
+        setMemberAccessToInfoOnIndividualPage
+      }
+      generalAccessToInfoOnIndividualPage={generalAccessToInfoOnIndividualPage}
+      setGeneralAccessToInfoOnIndividualPage={
+        setGeneralAccessToInfoOnIndividualPage
+      }
     />,
   ]
 
