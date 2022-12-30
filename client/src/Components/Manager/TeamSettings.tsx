@@ -11,6 +11,12 @@ export interface interfaceCustomUserInfoRequired {
   valueType: string
 }
 
+export interface interfaceSpecialUserInfoRequired {
+  name: string
+  description: string
+  valueType: string
+}
+
 export default function TeamSettingsManager(props: step) {
   const [teamName, setTeamName] = useState<String>('')
   const [membersCanEdit, SetMembersCanEdit] = useState<Boolean>(false)
@@ -18,6 +24,10 @@ export default function TeamSettingsManager(props: step) {
   const [customUserInfoRequired, setCustomUserInfoRequired] = useState<
     Array<interfaceCustomUserInfoRequired>
   >([{ name: '', description: '', valueType: 'String' }])
+  const [specialUserInfoRequired, setSpecialUserInfoRequired] = useState<
+    Array<interfaceSpecialUserInfoRequired>
+  >([{ name: 'Name', description: 'What is your name?', valueType: 'String' }])
+
   const [memberAccessToInfoOnGeneralPage, setMemberAccessToInfoOnGeneralPage] =
     useState<Array<String>>([])
   const [

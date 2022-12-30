@@ -12,13 +12,13 @@ export default function TeamInfoGathered(props: interfaceTeamInfoGathered) {
   const [error, setError] = useState<String>('')
 
   const handleNextPage = () => {
-    if (error === 'All name fields must be filled') setError('')
+    if (error === 'All name of fields must be filled') setError('')
 
     if (!noEmptyField(props.customUserInfoRequired))
-      return setError('All name fields must be filled')
+      return setError('All name of fields must be filled')
 
     if (!onlyUniqueNames(props.customUserInfoRequired))
-      return setError('All name fields must be unique')
+      return setError('All name of fields must be unique')
 
     props.setStep(props.step + 1)
   }
@@ -26,6 +26,10 @@ export default function TeamInfoGathered(props: interfaceTeamInfoGathered) {
   return (
     <div>
       {error && error}
+      <h3>
+        Names of custom fields cannot be field's name: 'Photograph', 'Name',
+        'Nickname', 'Biography'
+      </h3>
       <ViewCustomInfoRequired
         customUserInfoRequired={props.customUserInfoRequired}
         setCustomUserInfoRequired={props.setCustomUserInfoRequired}
@@ -108,7 +112,8 @@ const ViewCustomInfoRequired = (
                   handleInformationChange('valueType', index, e.target.value)
                 }
               >
-                <option value='String'>Text</option>
+                <option value='String'>Short Text</option>
+                <option value='LongString'>Long Text</option>
                 <option value='Number'>Number</option>
                 <option value='Boolean'>Yes-Or-No</option>
               </select>
@@ -179,3 +184,5 @@ const onlyUniqueNames = (
   }
   return true
 }
+
+// const no
