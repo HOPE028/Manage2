@@ -1,5 +1,4 @@
 const { db } = require('../firebase/firebase-config')
-const { createUser, currentUserGet } = require('../firebase/Auth')
 const {
   collection,
   addDoc,
@@ -19,7 +18,7 @@ const initialAddUser = async (req, res, next) => {
     const docRef = await setDoc(doc(db, 'Users', uid), {
       email: email,
       position: position,
-      data,
+      data: data,
       team: team,
     })
 

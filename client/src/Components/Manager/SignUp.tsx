@@ -3,7 +3,7 @@ import CreateUserManager from './CreateUser'
 import TeamSettingsManager from './TeamSettings'
 
 export default function ManagerSignUp() {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(0)
 
   const order = [
     <CreateUserManager step={step} setStep={setStep} />,

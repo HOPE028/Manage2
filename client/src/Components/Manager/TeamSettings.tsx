@@ -98,6 +98,14 @@ export default function TeamSettingsManager(props: step) {
       setStep={props.setStep}
       customUserInfoRequired={customUserInfoRequired}
       specialUserInfoRequired={specialUserInfoRequired}
+      teamName={teamName}
+      membersCanEdit={membersCanEdit}
+      memberAccessToInfoOnGeneralPage={memberAccessToInfoOnGeneralPage}
+      generalAccessToInfoOnGeneralPage={generalAccessToInfoOnGeneralPage}
+      memberAccessToInfoOnIndividualPage={memberAccessToInfoOnIndividualPage}
+      generalAccessToInfoOnIndividualPage={generalAccessToInfoOnIndividualPage}
+      generalViewIndividualPage={generalViewIndividualPage}
+      memberViewIndividualPage={memberViewIndividualPage}
     />,
   ]
 
