@@ -6,6 +6,8 @@ const {
   setDoc,
   doc,
   updateDoc,
+  writeBatch,
+  getDoc,
 } = require('firebase/firestore')
 
 const createTeam = async (req, res, next) => {
@@ -57,14 +59,16 @@ const createTeam = async (req, res, next) => {
 
   try {
     // Creating Team
-    const teamRef = await setDoc(doc(db, 'Teams', teamCode), {
+    const batch = writeBatch(db)
+
+    const teamRef = await batch.set(doc(db, 'Teams', teamCode), {
       Team_Size: teamSize,
       Team_Name: teamName,
       Members_Can_Edit: membersCanEdit,
     })
 
     // Creating less data user collection
-    const shortenedUserRef = await setDoc(
+    const shortenedUserRef = await batch.set(
       doc(db, 'Teams', teamCode, 'Shortened_Users', 'Shortened_Users'),
       {
         Shortened_Users: [],
@@ -72,7 +76,7 @@ const createTeam = async (req, res, next) => {
     )
 
     // Creating Settings
-    const generalUserOnGeneralPageRef = await setDoc(
+    const generalUserOnGeneralPageRef = await batch.set(
       doc(
         db,
         'Teams',
@@ -84,13 +88,13 @@ const createTeam = async (req, res, next) => {
         Accessible_Fields: generalAccessToInfoOnGeneralPage,
       }
     )
-    const memberOnGeneralPageRef = await setDoc(
+    const memberOnGeneralPageRef = await batch.set(
       doc(db, 'Teams', teamCode, 'Settings', 'Member_Access_On_General_Page'),
       {
         Accessible_Fields: memberAccessToInfoOnGeneralPage,
       }
     )
-    const generalUserOnIndividualPageRef = await setDoc(
+    const generalUserOnIndividualPageRef = await batch.set(
       doc(
         db,
         'Teams',
@@ -103,7 +107,7 @@ const createTeam = async (req, res, next) => {
         Accessible_Fields: generalAccessToInfoOnIndividualPage,
       }
     )
-    const memberOnIndividualPageRef = await setDoc(
+    const memberOnIndividualPageRef = await batch.set(
       doc(
         db,
         'Teams',
@@ -117,7 +121,7 @@ const createTeam = async (req, res, next) => {
       }
     )
 
-    const userInfoRequiredRef = await setDoc(
+    const userInfoRequiredRef = await batch.set(
       doc(db, 'Teams', teamCode, 'Settings', 'UserInfoRequired'),
       {
         Custom_User_Info_Required: customUserInfoRequired,
@@ -127,14 +131,20 @@ const createTeam = async (req, res, next) => {
 
     // Updating User Info
 
-    const usersInTeamRef = await setDoc(
+    const usersInTeamRef = await batch.set(
       doc(db, 'Teams', teamCode, 'Users', managerUserUID),
       { name: 'IDK' }
     )
 
-    const updateUserInfo = await updateDoc(doc(db, 'Users', managerUserUID), {
-      team: teamCode,
-    })
+    const updateUserInfo = await batch.update(
+      doc(db, 'Users', managerUserUID),
+      {
+        team: teamCode,
+        'data.teamSettingsCompleted': true,
+      }
+    )
+
+    await batch.commit()
 
     res.status(200).send({ Data: 'Success' })
   } catch (error) {
@@ -143,6 +153,54 @@ const createTeam = async (req, res, next) => {
   }
 }
 
+const getTeamRequiredInfoThroughUserUID = async (req, res, next) => {
+  const { userUID } = req.query
+
+  if (!userUID) {
+    res.status(400).send('Insufficient data')
+    return
+  }
+
+  let teamCode = ''
+
+  try {
+    const userSnap = await getDoc(doc(db, 'Users', userUID))
+
+    if (docSnap.exists()) {
+      const data = docSnap.data()
+      teamCode = data.team
+    } else {
+      console.log('No such document!')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(400).send('PROBLEM')
+  }
+
+  if (teamCode === '') {
+    res.status(400).send('Not Signed In')
+    return
+  }
+
+  try {
+    const requiredInfoSnap = await getDoc(
+      doc(db, 'Teams', teamCode, 'Settings', 'UserInfoRequired')
+    )
+
+    if (requiredInfoSnap.exists()) {
+      const data = docSnap.data()
+      res.status(200).send({ data: data })
+    } else {
+      console.log('Document Empty!')
+      res.status(400).send('Document Empty')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(400).send('Problem Happened')
+  }
+}
+
 module.exports = {
   createTeam,
+  getTeamRequiredInfoThroughUserUID,
 }
