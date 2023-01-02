@@ -15,13 +15,13 @@ export default function InputInformationManager() {
     axios
       .get('http://localhost:4000/api/get_current_user')
       .then((res) => res.data.data)
-      .then((res) => {})
+      .then((res) => getTeamRequiredInfo(res.uid))
       .catch((error) => console.log(error))
   }
 
   useEffect(() => {
-    getTeamRequiredInfo('1jtKaTzWvofteb4txNIYxxrLh2L2')
-    // getUserUID()
+    // getTeamRequiredInfo('1jtKaTzWvofteb4txNIYxxrLh2L2')
+    getUserUID()
   }, [])
 
   return <div>InputInformationManager</div>
