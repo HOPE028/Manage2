@@ -20,7 +20,10 @@ export default function CreateUserManager(props: step) {
       .then((res) => res.data.data)
       .then((res) => res.user)
       .then((res) => (temp = res.uid))
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        console.log(error)
+        temp = 'Error'
+      })
 
     return temp
   }
@@ -48,11 +51,21 @@ export default function CreateUserManager(props: step) {
 
     try {
       const userUID = await addUserToAuth()
+
+      if (userUID === 'Error') {
+        setError(
+          'Problem Signing Up: Try a different email or a longer password'
+        )
+        return
+      }
+
       await addUserToFirebase(userUID)
-      props.setStep(props.step + 1)
+        .then(() => props.setStep(props.step + 1))
+        .catch((error) => console.log(error))
     } catch (error) {
       console.log(console.log(error))
     }
+    setLoading(false)
   }
 
   return (

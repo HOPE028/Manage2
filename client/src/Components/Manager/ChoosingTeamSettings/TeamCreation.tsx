@@ -92,7 +92,9 @@ export default function TeamCreation(props: interfaceTeamCreation) {
           <h1>Success!</h1>
           <h3>Team Code: {teamCode}</h3>
           <h3>Carry On To Next Step: Sign Up In Your Own Team!</h3>
-          <button onClick={() => props.setStep(props.step + 1)}>Sign Up</button>
+          <button onClick={() => props.setStep(props.step + 1)}>
+            Join Your Team!
+          </button>
         </div>
       )}
     </div>

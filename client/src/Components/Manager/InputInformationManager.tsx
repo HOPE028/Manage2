@@ -20,7 +20,6 @@ export default function InputInformationManager() {
   }
 
   useEffect(() => {
-    // getTeamRequiredInfo('1jtKaTzWvofteb4txNIYxxrLh2L2')
     getUserUID()
   }, [])
 

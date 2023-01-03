@@ -4,7 +4,7 @@ import TeamSettingsManager from './TeamSettings'
 import InputInformationManager from './InputInformationManager'
 
 export default function ManagerSignUp() {
-  const [step, setStep] = useState(2)
+  const [step, setStep] = useState(0)
 
   const order = [
     <CreateUserManager step={step} setStep={setStep} />,

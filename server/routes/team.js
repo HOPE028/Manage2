@@ -166,8 +166,8 @@ const getTeamRequiredInfoThroughUserUID = async (req, res, next) => {
   try {
     const userSnap = await getDoc(doc(db, 'Users', userUID))
 
-    if (docSnap.exists()) {
-      const data = docSnap.data()
+    if (userSnap.exists()) {
+      const data = userSnap.data()
       teamCode = data.team
     } else {
       console.log('No such document!')
@@ -188,7 +188,7 @@ const getTeamRequiredInfoThroughUserUID = async (req, res, next) => {
     )
 
     if (requiredInfoSnap.exists()) {
-      const data = docSnap.data()
+      const data = requiredInfoSnap.data()
       res.status(200).send({ data: data })
     } else {
       console.log('Document Empty!')

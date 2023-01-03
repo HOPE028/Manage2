@@ -12,6 +12,7 @@ const initialAddUser = async (req, res, next) => {
 
   if (!email || !uid || !position) {
     res.status(400).send('Insufficient data')
+    return
   }
 
   try {
