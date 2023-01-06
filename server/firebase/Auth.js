@@ -15,11 +15,9 @@ const loginUser = (email, password) => {
 }
 
 const createUser = (email, password) => {
-  let respnse = createUserWithEmailAndPassword(auth, email, password)
-
-  console.log(response)
-
-  return response
+  return createUserWithEmailAndPassword(auth, email, password).catch((error) =>
+    console.log(error)
+  )
 }
 
 const logOut = () => {

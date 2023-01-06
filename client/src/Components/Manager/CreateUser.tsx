@@ -56,7 +56,7 @@ export default function CreateUserManager(props: step) {
         setError(
           'Problem Signing Up: Try a different email or a longer password'
         )
-        return
+        return setLoading(false)
       }
 
       await addUserToFirebase(userUID)
