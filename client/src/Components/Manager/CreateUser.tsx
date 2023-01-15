@@ -2,6 +2,14 @@ import React, { useState, useEffect, MouseEventHandler } from 'react'
 import axios from 'axios'
 import { step } from './SignUp'
 
+const getUserUID = async () => {
+  axios
+    .get('http://localhost:4000/api/get_current_user')
+    .then((res) => res.data.data)
+    .then((res) => console.log(res.uid))
+    .catch((error) => console.log(error))
+}
+
 export default function CreateUserManager(props: step) {
   const [email, setEmail] = useState<String>('')
   const [password, setPassword] = useState<String>('')
@@ -81,6 +89,7 @@ export default function CreateUserManager(props: step) {
         onSubmit={onSubmit}
         loading={loading}
       />
+      <button onClick={getUserUID}>USER?</button>
     </div>
   )
 }
