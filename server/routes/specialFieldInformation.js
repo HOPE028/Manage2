@@ -23,7 +23,7 @@ const returnSpecialFields = (req, res, next) => {
     })
   } catch (error) {
     console.log(error)
-    res.status(400).send('PROBLEM')
+    res.status(400).send('PROBLEMS')
   }
 }
 
