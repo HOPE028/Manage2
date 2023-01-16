@@ -174,7 +174,11 @@ const InputInformation = (props: interfaceInputInformation) => {
               )}
               {field.valueType === 'File' && (
                 <div>
-                  <input type='file' />
+                  <input
+                    type='file'
+                    accept='image/*'
+                    onChange={(e) => console.log(e.target.files)}
+                  />
                 </div>
               )}
             </div>
