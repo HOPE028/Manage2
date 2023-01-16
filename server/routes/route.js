@@ -1,6 +1,10 @@
 const express = require('express')
 const { hello, addUser, getUsers } = require('./hello')
-const { signUpUserAuth, getCurrentUser } = require('./authentication')
+const {
+  signUpUserAuth,
+  getCurrentUser,
+  signInUserAuth,
+} = require('./authentication')
 const { initialAddUser } = require('./users')
 const { returnSpecialFields } = require('./specialFieldInformation')
 const { createTeam, getTeamRequiredInfoThroughUserUID } = require('./team')
@@ -14,6 +18,8 @@ router.post('/add_user', addUser)
 router.get('/get_users', getUsers)
 
 router.post('/sign_up_user_auth', signUpUserAuth)
+
+router.post('/sign_in_user_auth', signInUserAuth)
 
 router.get('/get_current_user', getCurrentUser)
 

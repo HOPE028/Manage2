@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ManagerSignUp from './Components/Manager/SignUp'
-
-import axios from 'axios'
+import SignIn from './Components/All/SignIn'
 
 function App() {
   return (
@@ -10,6 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/*' element={<ManagerSignUp />} />
+          <Route path='/Sign_In' element={<SignIn />} />
         </Routes>
       </BrowserRouter>
     </div>
