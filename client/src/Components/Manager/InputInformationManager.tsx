@@ -7,8 +7,13 @@ import {
 import './ChoosingTeamSettings/style.css'
 import { v4 as uuidv4 } from 'uuid'
 
+interface interfaceFile {
+  value: string
+  file: FileList | null
+}
+
 interface dynamicObject {
-  [key: string]: String | Number | Boolean
+  [key: string]: String | Number | Boolean | interfaceFile
 }
 
 export default function InputInformationManager() {
@@ -56,12 +61,17 @@ export default function InputInformationManager() {
   ) => {
     let tempUserInput: dynamicObject = {}
     for (let field of customInfoRequired) {
-      if (['String', 'LongString', 'File'].includes(field.valueType)) {
+      if (['String', 'LongString'].includes(field.valueType)) {
         tempUserInput[field.name] = ''
       } else if (field.valueType === 'Number') {
         tempUserInput[field.name] = 0
       } else if (field.valueType === 'Boolean') {
         tempUserInput[field.name] = false
+      } else if (field.valueType === 'File') {
+        tempUserInput[field.name] = {
+          value: '',
+          file: null,
+        }
       }
     }
     for (let field of specialInfoRequired) {
@@ -107,11 +117,18 @@ interface interfaceInputInformation {
 const InputInformation = (props: interfaceInputInformation) => {
   const handleUserInfoChange = (
     key: string,
-    target: String | Number | Boolean
+    target: String | Number | Boolean | FileList,
+    valueType: String
   ) => {
-    let temp = props.userInfo
-    temp[key] = target
-    props.setUserInfo(temp)
+    if (valueType === 'File') {
+      let temp = props.userInfo
+      temp[key] = {
+        value: convertFile(target),
+        file: target,
+      }
+      props.setUserInfo(temp)
+    } else {
+    }
   }
 
   const [file, setFile] = useState<string>()
@@ -145,7 +162,11 @@ const InputInformation = (props: interfaceInputInformation) => {
                   <input
                     type='text'
                     onChange={(e) =>
-                      handleUserInfoChange(field.name, e.target.value)
+                      handleUserInfoChange(
+                        field.name,
+                        e.target.value,
+                        field.valueType
+                      )
                     }
                     maxLength={30}
                   />
@@ -156,7 +177,11 @@ const InputInformation = (props: interfaceInputInformation) => {
                   <input
                     type='number'
                     onChange={(e) =>
-                      handleUserInfoChange(field.name, Number(e.target.value))
+                      handleUserInfoChange(
+                        field.name,
+                        Number(e.target.value),
+                        field.valueType
+                      )
                     }
                     maxLength={30}
                   />
@@ -166,7 +191,11 @@ const InputInformation = (props: interfaceInputInformation) => {
                 <div>
                   <textarea
                     onChange={(e) =>
-                      handleUserInfoChange(field.name, e.target.value)
+                      handleUserInfoChange(
+                        field.name,
+                        e.target.value,
+                        field.valueType
+                      )
                     }
                   />
                 </div>
@@ -180,7 +209,8 @@ const InputInformation = (props: interfaceInputInformation) => {
                     onChange={(e) => {
                       handleUserInfoChange(
                         field.name,
-                        Boolean(e.target.checked)
+                        Boolean(e.target.checked),
+                        field.valueType
                       )
                       console.log(Boolean(e.target.checked))
                     }}
@@ -199,6 +229,7 @@ const InputInformation = (props: interfaceInputInformation) => {
                     }}
                   />
                   {file && <img src={file} />}
+                  <button onClick={() => console.log(file)}>DATA</button>
                 </div>
               )}
             </div>
