@@ -114,6 +114,22 @@ const InputInformation = (props: interfaceInputInformation) => {
     props.setUserInfo(temp)
   }
 
+  const [file, setFile] = useState<string>()
+
+  const convertFile = (files: FileList | null) => {
+    if (files) {
+      const fileRef = files[0] || ''
+      const fileType: string = fileRef.type || ''
+      console.log('This file upload is of type:', fileType)
+      const reader = new FileReader()
+      reader.readAsBinaryString(fileRef)
+      reader.onload = (ev: any) => {
+        // convert it to base64
+        setFile(`data:${fileType};base64,${btoa(ev.target.result)}`)
+      }
+    }
+  }
+
   return (
     <div>
       {props.userInfoRequired &&
@@ -177,8 +193,12 @@ const InputInformation = (props: interfaceInputInformation) => {
                   <input
                     type='file'
                     accept='image/*'
-                    onChange={(e) => console.log(e.target.files)}
+                    onChange={(e) => {
+                      convertFile(e.target.files)
+                      // console.log(e.target.value)
+                    }}
                   />
+                  {file && <img src={file} />}
                 </div>
               )}
             </div>
