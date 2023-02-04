@@ -7,13 +7,13 @@ import {
 import './ChoosingTeamSettings/style.css'
 import { v4 as uuidv4 } from 'uuid'
 
-interface interfaceFile {
-  value: string
-  file: FileList | null
-}
+// interface interfaceFile {
+//   value: string
+//   // file: FileList | null
+// }
 
 interface dynamicObject {
-  [key: string]: String | Number | Boolean | interfaceFile
+  [key: string]: String | Number | Boolean // | interfaceFile
 }
 
 export default function InputInformationManager() {
@@ -67,12 +67,12 @@ export default function InputInformationManager() {
         tempUserInput[field.name] = 0
       } else if (field.valueType === 'Boolean') {
         tempUserInput[field.name] = false
-      } else if (field.valueType === 'File') {
-        tempUserInput[field.name] = {
-          value: '',
-          file: null,
-        }
-      }
+      } // else if (field.valueType === 'File') {
+      //   tempUserInput[field.name] = {
+      //     value: '',
+      //     file: null,
+      //   }
+      // }
     }
     for (let field of specialInfoRequired) {
       if (['String', 'LongString', 'File'].includes(field.valueType)) {
@@ -117,35 +117,28 @@ interface interfaceInputInformation {
 const InputInformation = (props: interfaceInputInformation) => {
   const handleUserInfoChange = (
     key: string,
-    target: String | Number | Boolean | FileList,
-    valueType: String
+    target: String | Number | Boolean // | FileList,
   ) => {
-    if (valueType === 'File') {
-      let temp = props.userInfo
-      temp[key] = {
-        value: convertFile(target),
-        file: target,
-      }
-      props.setUserInfo(temp)
-    } else {
-    }
+    let temp = props.userInfo
+    temp[key] = target
+    props.setUserInfo(temp)
   }
 
-  const [file, setFile] = useState<string>()
+  // const [file, setFile] = useState<string>()
 
-  const convertFile = (files: FileList | null) => {
-    if (files) {
-      const fileRef = files[0] || ''
-      const fileType: string = fileRef.type || ''
-      console.log('This file upload is of type:', fileType)
-      const reader = new FileReader()
-      reader.readAsBinaryString(fileRef)
-      reader.onload = (ev: any) => {
-        // convert it to base64
-        setFile(`data:${fileType};base64,${btoa(ev.target.result)}`)
-      }
-    }
-  }
+  // const convertFile = (files: FileList | null) => {
+  //   if (files) {
+  //     const fileRef = files[0] || ''
+  //     const fileType: string = fileRef.type || ''
+  //     console.log('This file upload is of type:', fileType)
+  //     const reader = new FileReader()
+  //     reader.readAsBinaryString(fileRef)
+  //     reader.onload = (ev: any) => {
+  //       // convert it to base64
+  //       setFile(`data:${fileType};base64,${btoa(ev.target.result)}`)
+  //     }
+  //   }
+  // }
 
   return (
     <div>
@@ -164,8 +157,8 @@ const InputInformation = (props: interfaceInputInformation) => {
                     onChange={(e) =>
                       handleUserInfoChange(
                         field.name,
-                        e.target.value,
-                        field.valueType
+                        e.target.value
+                        // field.valueType
                       )
                     }
                     maxLength={30}
@@ -179,8 +172,8 @@ const InputInformation = (props: interfaceInputInformation) => {
                     onChange={(e) =>
                       handleUserInfoChange(
                         field.name,
-                        Number(e.target.value),
-                        field.valueType
+                        Number(e.target.value)
+                        // field.valueType
                       )
                     }
                     maxLength={30}
@@ -193,8 +186,8 @@ const InputInformation = (props: interfaceInputInformation) => {
                     onChange={(e) =>
                       handleUserInfoChange(
                         field.name,
-                        e.target.value,
-                        field.valueType
+                        e.target.value
+                        // field.valueType
                       )
                     }
                   />
@@ -209,27 +202,13 @@ const InputInformation = (props: interfaceInputInformation) => {
                     onChange={(e) => {
                       handleUserInfoChange(
                         field.name,
-                        Boolean(e.target.checked),
-                        field.valueType
+                        Boolean(e.target.checked)
+                        // field.valueType
                       )
                       console.log(Boolean(e.target.checked))
                     }}
                   />
                   <label htmlFor={key}></label>
-                </div>
-              )}
-              {field.valueType === 'File' && (
-                <div>
-                  <input
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => {
-                      convertFile(e.target.files)
-                      // console.log(e.target.value)
-                    }}
-                  />
-                  {file && <img src={file} />}
-                  <button onClick={() => console.log(file)}>DATA</button>
                 </div>
               )}
             </div>
