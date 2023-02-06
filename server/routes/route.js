@@ -5,9 +5,13 @@ const {
   getCurrentUser,
   signInUserAuth,
 } = require('./authentication')
-const { initialAddUser } = require('./users')
+const { initialAddUser, canAccessHome } = require('./users')
 const { returnSpecialFields } = require('./specialFieldInformation')
-const { createTeam, getTeamRequiredInfoThroughUserUID } = require('./team')
+const {
+  createTeam,
+  getTeamRequiredInfoThroughUserUID,
+  postUserInfoThroughUID,
+} = require('./team')
 
 const router = express.Router()
 
@@ -29,10 +33,14 @@ router.get('/data/specialFields', returnSpecialFields)
 
 router.post('/create_team', createTeam)
 
+router.get('/can_access_home', canAccessHome)
+
 router.get(
   '/get_user_requirements_through_uid',
   getTeamRequiredInfoThroughUserUID
 )
+
+router.post('/post_user_info_through_uid', postUserInfoThroughUID)
 
 module.exports = {
   router,

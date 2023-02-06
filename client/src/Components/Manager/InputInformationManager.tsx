@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import {
   interfaceCustomUserInfoRequired,
@@ -23,8 +24,12 @@ export default function InputInformationManager() {
   const [specialUserInfoRequired, setSpecialUserInfoRequired] = useState<
     Array<interfaceSpecialUserInfoRequired>
   >([])
+  const [UID, setUID] = useState<String>()
 
   const [userInfo, setUserInfo] = useState<dynamicObject>({})
+  const [error, setError] = useState<String>('')
+  const [loading, setLoading] = useState<boolean>(false)
+  let navigate = useNavigate()
 
   useEffect(() => {
     getUserUID()
@@ -34,7 +39,10 @@ export default function InputInformationManager() {
     axios
       .get('http://localhost:4000/api/get_current_user')
       .then((res) => res.data.data)
-      .then((res) => getTeamRequiredInfo(res.uid))
+      .then((res) => {
+        setUID(res.uid)
+        getTeamRequiredInfo(res.uid)
+      })
       .catch((error) => console.log(error))
   }
 
@@ -86,10 +94,44 @@ export default function InputInformationManager() {
     setUserInfo(tempUserInput)
   }
 
+  const onSubmit = async () => {
+    setError('')
+    setLoading(true)
+    if (isUserInfoRequiredEmpty()) {
+      setError('Required info sections empty. Please complete input.')
+      setLoading(false)
+      return
+    }
+
+    await axios({
+      method: 'post',
+      url: 'http://localhost:4000/api/post_user_info_through_uid',
+      data: {
+        UID: UID,
+        userInfo: userInfo,
+      },
+    })
+      .then(() => navigate('home'))
+      .catch((error) => {
+        console.log(error)
+        setError('Problem Occured, try again later')
+      })
+  }
+
+  const isUserInfoRequiredEmpty = (): Boolean => {
+    for (const field in userInfo) {
+      if (userInfo[field] === '') {
+        return true
+      }
+    }
+    return false
+  }
+
   return (
     <div>
       <h1>Input the information</h1>
       <h3>All information is required!</h3>
+      <h3 style={{ color: 'red' }}>{error}</h3>
       <InputInformation
         userInfoRequired={customUserInfoRequired}
         userInfo={userInfo}
@@ -102,6 +144,8 @@ export default function InputInformationManager() {
         setUserInfo={setUserInfo}
       />
       <button onClick={() => console.log(userInfo)}>Data</button>
+      <button onClick={onSubmit}>Upload Information</button>
+      <button onClick={() => console.log(UID)}>UID</button>
     </div>
   )
 }

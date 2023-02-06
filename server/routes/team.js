@@ -200,7 +200,56 @@ const getTeamRequiredInfoThroughUserUID = async (req, res, next) => {
   }
 }
 
+const postUserInfoThroughUID = async (req, res) => {
+  const { UID, userInfo } = req.body
+
+  let teamCode = ''
+
+  try {
+    const userSnap = await getDoc(doc(db, 'Users', UID))
+
+    if (userSnap.exists()) {
+      const data = userSnap.data()
+      teamCode = data.team
+    } else {
+      console.log('No such document!')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(400).send('PROBLEM')
+  }
+
+  if (teamCode === '') {
+    res.status(400).send('Not Signed In')
+    return
+  }
+
+  try {
+    setDoc(doc(db, 'Teams', teamCode, 'Users', UID), {
+      Info: userInfo,
+    })
+
+    updateDoc(
+      doc(db, 'Teams', teamCode, 'Shortened_Users', 'Shortened_Users'),
+      {
+        [UID]: userInfo,
+      }
+    )
+
+    updateDoc(doc(db, 'Users', UID), {
+      'data.registeredSelfInTeam': true,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ Error: 'Problem' })
+    return
+  }
+
+  res.status(200).send({ data: 'Sign in complete' })
+}
+
 module.exports = {
   createTeam,
   getTeamRequiredInfoThroughUserUID,
+  postUserInfoThroughUID,
 }

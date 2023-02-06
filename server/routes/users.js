@@ -6,6 +6,7 @@ const {
   setDoc,
   doc,
 } = require('firebase/firestore')
+const { currentUserGet } = require('../firebase/Auth')
 
 const initialAddUser = async (req, res, next) => {
   const { email, uid, position, team, data } = req.body
@@ -32,6 +33,16 @@ const initialAddUser = async (req, res, next) => {
   }
 }
 
+const canAccessHome = async (req, res) => {
+  currentUserData = currentUserGet()
+
+  if (!currentUserData) {
+    res.status(400).send({ error: 'Not Signed In' })
+    return
+  }
+}
+
 module.exports = {
   initialAddUser,
+  canAccessHome,
 }
