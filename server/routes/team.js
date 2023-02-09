@@ -7,7 +7,9 @@ const {
   doc,
   updateDoc,
   writeBatch,
+
   getDoc,
+  increment,
 } = require('firebase/firestore')
 
 const createTeam = async (req, res, next) => {
@@ -235,9 +237,11 @@ const postUserInfoThroughUID = async (req, res) => {
         [UID]: userInfo,
       }
     )
-
     updateDoc(doc(db, 'Users', UID), {
       'data.registeredSelfInTeam': true,
+    })
+    updateDoc(doc(db, 'Teams', teamCode), {
+      Team_Size: increment(1),
     })
   } catch (error) {
     console.log(error)
